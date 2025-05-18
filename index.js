@@ -6,8 +6,7 @@ import connectDB from "./config/connectDB.js";
 import { userRouter } from "./routes/userRoute.js";
 
 const app = express();
-// const port = process.env.PORT || 8000;
-const port = 5000;
+const port = process.env.PORT || 8000;
 
 // Database connection-----------------------------
 connectDB();
@@ -25,12 +24,12 @@ app.use(
 // All Api Here------------------------------------
 app.use("/api/v1/user", userRouter);
 
-app.get("/api/v1", (req, res) => {
-  res.send("Server is running!");
+app.get("/", (req, res) => {
+  res.send("Mern server is running!");
 });
 
 app.listen(port, () => {
-  console.log(`Server is running on https//:localhost:${port}`);
+  console.log(`Server is running on port: ${port}`);
 });
 
 export default app;

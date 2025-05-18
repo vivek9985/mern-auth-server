@@ -23,6 +23,6 @@ userRouter.post("/verify-email", userAuth, verifyEmail);
 // -
 // -
 // -
-userRouter.get("/all", userAuth, getAllUser);
+userRouter.get("/all", getAllUser);
 userRouter.get("/:id", userAuth, getSingleUser);
 userRouter.delete("/:id", userAuth, isAdmin, deletSingleUser);

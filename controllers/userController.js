@@ -72,7 +72,7 @@ export const registerUser = async (req, res) => {
     });
     await result.save();
 
-    const token = jwt.sign({ id: result._id }, "secrettext", {
+    const token = jwt.sign({ id: result._id }, process.env.JWT_SECRET, {
       expiresIn: "7d",
     });
     res.cookie("token", token, {
@@ -122,9 +122,13 @@ export const loginUser = async (req, res) => {
       });
     }
 
-    const token = jwt.sign({ id: user._id, email: user.email }, "secrettext", {
-      expiresIn: "7d",
-    });
+    const token = jwt.sign(
+      { id: user._id, email: user.email },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "7d",
+      }
+    );
     res.cookie("token", token, {
       httpOnly: true,
       secure: true,
@@ -171,7 +175,7 @@ export const logoutUser = async (req, res) => {
 export const sendVerifyOtp = async (req, res) => {
   try {
     const token = req.cookies.token;
-    const { id } = jwt.verify(token, "secrettext");
+    const { id } = jwt.verify(token, process.env.JWT_SECRET);
     if (!id) {
       return res.status(400).json({
         success: false,
@@ -225,7 +229,7 @@ export const verifyEmail = async (req, res) => {
   try {
     const { otp } = req.body;
     const token = req.cookies.token;
-    const decoded = jwt.verify(token, "secrettext");
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await userModel.findById(decoded.id);
 
     if (user.verifyOtp === "" || user.verifyOtp !== otp) {
