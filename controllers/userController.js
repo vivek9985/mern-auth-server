@@ -10,8 +10,14 @@ import checkEmailExistence from "../utils/emailChecker.js";
 
 export const registerUser = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { avatar, name, email, password } = req.body;
 
+    console.log(req.bosy);
+    if (!avatar) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Avatar is required!" });
+    }
     if (!name) {
       return res
         .status(400)
@@ -58,7 +64,12 @@ export const registerUser = async (req, res) => {
       });
     }
     const hashedPassword = await bcrypt.hash(password, 12);
-    const result = new userModel({ name, email, password: hashedPassword });
+    const result = new userModel({
+      avatar,
+      name,
+      email,
+      password: hashedPassword,
+    });
     await result.save();
 
     const token = jwt.sign({ id: result._id }, process.env.JWT_SECRET, {
@@ -66,7 +77,7 @@ export const registerUser = async (req, res) => {
     });
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: true,
       sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
@@ -85,7 +96,7 @@ export const registerUser = async (req, res) => {
     });
     y;
   } catch (error) {
-    // console.log("Register error:", error);
+    console.log("Register error:", error);
     return res.json({
       success: false,
       message: error.message,

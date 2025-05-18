@@ -10,6 +10,7 @@ import {
   verifyEmail,
 } from "../controllers/userController.js";
 import userAuth from "../middlewares/userAuth.js";
+import isAdmin from "../middlewares/isAdmin.js";
 
 export const userRouter = express.Router();
 
@@ -24,4 +25,4 @@ userRouter.post("/verify-email", userAuth, verifyEmail);
 // -
 userRouter.get("/all", userAuth, getAllUser);
 userRouter.get("/:id", userAuth, getSingleUser);
-userRouter.delete("/:id", userAuth, deletSingleUser);
+userRouter.delete("/:id", userAuth, isAdmin, deletSingleUser);

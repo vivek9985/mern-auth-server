@@ -6,7 +6,7 @@ import connectDB from "./config/connectDB.js";
 import { userRouter } from "./routes/userRoute.js";
 
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 8000;
 
 // Database connection-----------------------------
 connectDB();
@@ -16,7 +16,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: ["http://localhost:5173", "https://mernstack-auth.netlify.app/"],
     credentials: true,
   })
 );
