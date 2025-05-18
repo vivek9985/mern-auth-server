@@ -11,7 +11,7 @@ const isAdmin = async (req, res, next) => {
       });
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, "secrettext");
     const admin = await userModel.findOne({ _id: decoded?.id });
     const isAdmin = admin?.role === "admin";
     if (!isAdmin) {

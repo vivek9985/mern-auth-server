@@ -72,13 +72,13 @@ export const registerUser = async (req, res) => {
     });
     await result.save();
 
-    const token = jwt.sign({ id: result._id }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ id: result._id }, "secrettext", {
       expiresIn: "7d",
     });
     res.cookie("token", token, {
       httpOnly: true,
       secure: true,
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+      sameSite: "none",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
@@ -122,15 +122,13 @@ export const loginUser = async (req, res) => {
       });
     }
 
-    const token = jwt.sign(
-      { id: user._id, email: user.email },
-      process.env.JWT_SECRET,
-      { expiresIn: "7d" }
-    );
+    const token = jwt.sign({ id: user._id, email: user.email }, "secrettext", {
+      expiresIn: "7d",
+    });
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+      secure: true,
+      sameSite: "none",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
@@ -152,8 +150,8 @@ export const logoutUser = async (req, res) => {
   try {
     res.clearCookie("token", {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+      secure: true,
+      sameSite: "none",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
@@ -173,7 +171,7 @@ export const logoutUser = async (req, res) => {
 export const sendVerifyOtp = async (req, res) => {
   try {
     const token = req.cookies.token;
-    const { id } = jwt.verify(token, process.env.JWT_SECRET);
+    const { id } = jwt.verify(token, "secrettext");
     if (!id) {
       return res.status(400).json({
         success: false,
@@ -227,7 +225,7 @@ export const verifyEmail = async (req, res) => {
   try {
     const { otp } = req.body;
     const token = req.cookies.token;
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, "secrettext");
     const user = await userModel.findById(decoded.id);
 
     if (user.verifyOtp === "" || user.verifyOtp !== otp) {

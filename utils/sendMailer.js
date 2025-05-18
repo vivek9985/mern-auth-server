@@ -2,16 +2,24 @@ import nodemailer from "nodemailer";
 
 const sendMailer = async (options) => {
   const transporter = nodemailer.createTransport({
-    service: process.env.SMTP_SERVICE,
+    // service: process.env.SMTP_SERVICE,
+    // auth: {
+    //   user: process.env.SMTP_USER,
+    //   pass: process.env.SMTP_PASS,
+    // },
+    service: gmail,
     auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
+      user: "anandovivek463@gmail.com",
+      pass: "qnjj ilxx mmrj rwge",
     },
   });
 
+  const SenderName = "Menzo";
+  const SenderEmail = "anandovivek463@gmail.com";
+
   // Define email options
   const mailOptions = {
-    from: `${process.env.SENDER_NAME} <${process.env.SENDER_EMAIL}>`,
+    from: `${SenderName} <${SenderEmail}>`,
     to: options?.email,
     subject: options?.subject,
     text: options?.text,

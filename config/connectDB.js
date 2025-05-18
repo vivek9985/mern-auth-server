@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-const DBport = process.env.DB_URI;
+// const DBport = process.env.DB_URI;
+const DBport = "mongodb://localhost:27017/mernAuth";
 
 const connectDB = () => {
   try {
